@@ -2,40 +2,48 @@
 #    Algorithms and Data Structures using Python
 # Exercises 1 - 9
 
+
 class Fraction:
     
     # constructor
     def __init__(self, top, bottom):
-        
-        # check to see if inputs are integers
         if isinstance(top, int):
             self.num = top
         else:
-            raise ValueError("Numerator is not an integer.")
+            raise TypeError("numerator is not an integer.")
             
         if isinstance(bottom, int):
             self.den = bottom
         else:
-            raise ValueError("Denominator is not an integer.")
-        
-        if isinstance(bottom, 0):
-            self.den = bottom
-        else:
-            raise ValueError("The denominator cannot be zero.")
+            raise TypeError("denominator is not an integer.")
 
-        common = gcd(self.num,self.den)   # apply gcd function
+        common = gcd(self.num, self.den)  # apply gcd function
         self.num = self.num//common       # numerator
         self.den = self.den//common       # denominator
         
-    # string  
+    # string  (human-readable)
     def __str__(self):
+        return str(self.num)+"/"+str(self.den)
+
+    # returns a string containing a printable representation  (machine-readable)
+    def __repr__(self):
         return str(self.num)+"/"+str(self.den)
     
     # addition
     def __add__(self, otherFraction):
+        if isinstance(otherFraction, int):
+            otherFraction = Fraction(otherFraction, 1)
         newNum = self.num * otherFraction.den + self.den * otherFraction.num
         newDen = self.den * otherFraction.den
         return Fraction(newNum, newDen)
+
+    # reverse addition 
+    def __radd__(self, otherFraction):
+        return __add__(otherFraction)
+
+    # incremental adding, used with += operator
+    def __iadd__(self,otherfraction):
+        return __add__(otherfraction)
     
     # subtraction
     def __sub__(self, otherFraction):
@@ -90,7 +98,7 @@ class Fraction:
          firstNum = self.num * otherFraction.den
          secondNum = otherFraction.num * self.den
          return firstNum != secondNum
-
+    
 
 # greatest common denominator
 def gcd(m,n):     
@@ -102,30 +110,33 @@ def gcd(m,n):
     return n
 
 
+# error handler
+def main():
+    try:
+        main()
+    except ZeroDivisionError as err:
+        print('oops:', err)
+    except TypeError as err:
+        print('You need to type in numbers:', err)
+
 
 # output
-x = Fraction(1,1)
-y = Fraction(1,0)
-print("The first fraction is",x)
-print("The second fraction is", y)
-print ("\n")
-print("Added:", x + y)
-print("Subtracted:", x - y)
-print("Multiplied:", x * y)
-print("Divided:", x / y)
-print("\n")
-print("First fraction is greater than second?", x > y)
-print("First fraction is less than second?", x < y)
-print("First fraction is greater than or equal to second?", x >= y)
-print("First fraction is less than or equal to second?", x <= y)
-print("First fraction is equal to second?", x == y)
-print("First fraction is not equal to second?", x != y)
-
-
-
-
-
-
-
-
+if __name__ == "__main__":
+    x = Fraction(1,4)
+    y = Fraction(1,2)
+    print("The first fraction is",x)
+    print("The second fraction is", y)
+    print ("\n")
+    print("Added:", x + y)
+    print("Integer addition (adding 5):", y + 5)
+    print("Subtracted:", x - y)
+    print("Multiplied:", x * y)
+    print("Divided:", x / y)
+    print("\n")
+    print("First fraction is greater than second?", x > y)
+    print("First fraction is less than second?", x < y)
+    print("First fraction is greater than or equal to second?", x >= y)
+    print("First fraction is less than or equal to second?", x <= y)
+    print("First fraction is equal to second?", x == y)
+    print("First fraction is not equal to second?", x != y)
 
