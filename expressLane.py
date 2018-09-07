@@ -1,93 +1,143 @@
-import random
+from random import randint
 
 class Queue:
     def __init__(self):
         self.items = []
-
+    
     def isEmpty(self):
         return self.items == []
 
     def enqueue(self, item):
-        self.items.insert(0,item)
+        self.items.insert(0, item)
 
     def dequeue(self):
         return self.items.pop()
-
+   
     def size(self):
         return len(self.items)
-
-    def peek(self):
-        return self.items[len(self.items)-1]
-
-line = Queue()
-servicing = []
-customerWait = Queue()
+    
+    def getInternalList(self):
+        return self.items
 
 
 class Customer:
-    totalTime = 0
-    numberOfItems = random.randrange(1,30)
-    serviceTime = (numberOfItems * 30) / 60
+    def __init__(self,n):
+        self.numberOfItems=n
 
-class Cashier:
-    def busy(self):
-        if len(servicing) == 0:
-            return False
-        else:
-            return True
+    # return the data in the form of string
+    def __str__(self):
+        return str(self.numberOfItems)
+
+    def getNumberOfItems(self):
+        return self.numberOfItems
+
+
+class Expresschecker:
+    def __init__(self,n):
+        self.numberOfItems=n
+
+    def __str__(self):
+        return str(self.numberOfItems)
+
+    def getNumberOfItems(self):
+        return self.numberOfItems
+
+
+def checkOut(Expresschecker):
+    items = Expresschecker.getNumberOfItems()
     
-def oneCashier():
-    numberOfCustomers = 0
-    while numberOfCustomers < 10:
-        line.enqueue(Customer())
-        Customer.totalTime += 1
+    if items <= 10:
+        return randint(2, 5)
 
-    while not line.isEmpty() & Cashier.busy(False):
-        servicing.append(line.dequeue())
+    if items <= 20:
+        return randint(6, 9)
+
+    return randint(10, 14)
+
+
+Expresschecker = Queue()
+
+totalcheckoutCustomers = 10
+
+    # --- express lane ---
+
+for i in range(totalcheckoutCustomers):
+    randomItemsQty = randint(1, 25)      # customer getting between 1-25 items
+
+    customer = Customer(randomItemsQty)
+
+    Expresschecker.enqueue(customer)     # add customer to checkout queue
     
-        #customerWait.peek + 1  
-        #numberOfCustomers -= 1
+
+totalTimetaken = 0   # initialize time
+
+
+totalcheckoutCustomers = Expresschecker.size()   # size of queue
+
+
+while not(Expresschecker.isEmpty()):
+    totalTimetaken += randint(1,5)
     
+    expresscustomer = Expresschecker.dequeue()
     
-    print(line.items)
-    print(customerWait.items)
-    print(servicing.items)
+    timeTaken = checkOut(expresscustomer)
+    
+    totalTimetaken += timeTaken
 
-### generate a line of ten customers
-##numberOfCustomers = 0
-##while numberOfCustomers < 10:
-##  line.enqueue(round(random.randrange(1,31) * 0.3, 2))
-##  numberOfCustomers += 1
-##print(line.items)
-##
-### scenario 1: 
-##while numberOfCustomers > 0:
-##    line.dequeue()
-##    numberOfCustomers -= 1
-##    print(line.items)
+   
 
-oneCashier()
+# --- express lane output ---
+avgWaitingtime = totalTimetaken/totalcheckoutCustomers
 
+print("Average waiting time for the express customer queue is "+str(avgWaitingtime)+" minutes ")
+print("Remaining Custimers in the express customer Queue is: ",Expresschecker.size())
 
+# returns random checkout time, based on number of items
 
+def checkOut(customer):
+    items = customer.getNumberOfItems()
+    if items <= 10:
+        return randint(1, 5)
 
+    if items <= 20:
+        return randint(6, 10)
 
-    one cashier
-
-- generate line queue
-- add one customer and arrival time
-- give customers to service queue and add service time
-- finish line when queue < 10
-
-While there are customers AND cashier is not busy
-- pop customer off line queue and add to cashier queue
-- while service time != 0, subtract 1 from service time
-- when service time = 0, pop customer off queue
-- accept next customer
+    return randint(11, 15)
 
 
+    # --- normal lane ---
 
-- arrivalTime + serviceTime + waitTime = totalTime
+customersQueue = Queue()
+
+totalCustomers = 20
+
+for i in range(totalCustomers):
+    randomItemsQty = randint(1, 25)    # customer getting between 1-25 items
+
+    customer = Customer(randomItemsQty)
+
+    customersQueue.enqueue(customer)   # add customer to checkout queue
 
 
+totalTimetaken = 0  # initialize time
 
+totalCustomers = customersQueue.size()
+
+
+while not(customersQueue.isEmpty()):
+    totalTimetaken += randint(1,5)
+
+    customer = customersQueue.dequeue()
+
+    timeTaken = checkOut(customer)
+
+    totalTimetaken += timeTaken
+
+   
+
+    # --- normal lane output ---
+
+averageWaitTime = totalTimetaken/totalCustomers
+
+print("Average wait time for the customer queue is " + str(averageWaitTime) + " minutes ")
+print("Remaining Customers in the customer Queue is: ", customersQueue.size())
