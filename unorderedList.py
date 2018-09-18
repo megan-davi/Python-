@@ -40,6 +40,7 @@ class UnorderedList:
         temp = Node(item)
         temp.setNext(self.head)
         self.head = temp
+        print ("Added", item)
 
     def size(self):
         "returns the number of list items"
@@ -73,6 +74,7 @@ class UnorderedList:
         temp = Node(item)
         temp.setNext(current.getNext())
         current.setNext(temp)
+        print ("Appended", item)
 
     def index(self, item):
         "determine index of item"
@@ -100,6 +102,7 @@ class UnorderedList:
             temp = Node(item)
             temp.setNext(current.getNext())
             current.setNext(temp)
+            print ("Inserted", item, "@ index:", 2)
         if current == None:
             print ("Index out of range - insertion failed")
 
@@ -120,6 +123,7 @@ class UnorderedList:
             self.head = current.getNext()
         else:
             previous.setNext(current.getNext())
+            print ("Removed", item)
 
 
     def remove_list_item_by_id(self, item_id):
@@ -169,7 +173,34 @@ class UnorderedList:
             return
         prev.next = head.next
         head = None
-        
+
+
+    def pop(self):
+        "pops item off list"
+        val = self.head.getNext().getData()
+        self.head.setNext(self.head.getNext().getNext())
+        self.size -= 1
+        return val
+        print ("Popped last item off list")
+
+    def popNode(self, index):
+        "pops item off list based on index"
+        prev = None
+        node = self.head
+        i = 0
+
+        while ( node != None ) and ( i < index ):
+            prev = node
+            node = node.next
+            i += 1
+
+        if prev == None:
+            self.head = node.next
+            print ("Popped at index", index)
+        else:
+            print ("Index does not exist, pop failed")
+            return None
+            
     # pop item off end of list
     #def pop(pos=None)
      #   if pos = None:
@@ -178,19 +209,37 @@ class UnorderedList:
 
 # --- OUTPUT ----
 myList = UnorderedList()
+
 print ("List creation:")
+
 myList.add(1)
-print ("Added", 1)
+
 myList.add(2)
-print ("Added", 2)
+
 myList.add(3)
-print ("Added", 3)
+
 myList.append(4)
-print ("Appended", 4)
+
 myList.insert(2, "new")
-print ("Inserted", "'new' @ index:", 2)
+
 myList.remove(2)
-print ("Removed", 2)
+
+myList.add(5)
+
+myList.add(6)
+
+myList.add(7)
+
+myList.popNode(0)
+
+myList.add(8)
+
+myList.add(9)
+
+myList.pop()
+
+    
+    
 print ()
 print ("List Output:" )
 print (myList.listPrint())
