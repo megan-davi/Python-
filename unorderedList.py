@@ -22,6 +22,7 @@ class UnorderedList:
         "constructor"
         self.head = None
         self.tail = None
+        #self.size = 0
     
     def listPrint(self):
         "prints list"
@@ -53,6 +54,7 @@ class UnorderedList:
             current = current.getNext() 
         return count
 
+
     def search(self,item):
         "searches for item"
         # define current node
@@ -67,14 +69,21 @@ class UnorderedList:
         return found
 
     def append(self, item):
-        "adds item to opposite end of list that add() does"
-        current = self.head
-        while current.getNext() != None:
-            current = current.getNext()
-        temp = Node(item)
-        temp.setNext(current.getNext())
-        current.setNext(temp)
-        print ("Appended", item)
+        "adds item to tail end of list"
+        if self.size == 0:
+            temp = Node(item)
+            temp.setNext(self.head)
+            self.head = temp
+            print ("List was empty, item added instead of appended")
+            return
+        else:
+            current = self.head
+            while current.getNext() != None:
+                current = current.getNext()
+            temp = Node(item)
+            temp.setNext(current.getNext())
+            current.setNext(temp)
+            print ("Appended", item)
 
     def index(self, item):
         "determine index of item"
@@ -103,8 +112,10 @@ class UnorderedList:
             temp.setNext(current.getNext())
             current.setNext(temp)
             print ("Inserted", item, "@ index:", 2)
+            return True
         if current == None:
             print ("Index out of range - insertion failed")
+            return False
 
     
     def remove(self,item):
@@ -126,62 +137,24 @@ class UnorderedList:
             print ("Removed", item)
 
 
-    def remove_list_item_by_id(self, item_id):
-        "remove the list item with the item id"
-
-        current_id = 1
-        current_node = self.head
-        previous_node = None
-
-        while current_node is not None:
-            if current_id == item_id:
-                # if this is the first node (head)
-                if previous_node is not None:
-                    previous_node.next = current_node.next
-                else:
-                    self.head = current_node.next
-                    # we don't have to look any further
-                    return
-
-            # needed for the next iteration
-            previous_node = current_node
-            current_node = current_node.next
-            current_id = current_id + 1
-
-        return
-
-    def removeNode2(self, item):
-        self.head.getNext = self.head.getNext.getNext
-        return self
-        
-
-
-    def removeNode(self, item):
-        head = self.head
-
-        if (head is not None):
-            if (head.data == item):
-                self.head = head.next
-                head = None
-                return
-        while (head is not None):
-            if head.data == item:
-                break
-            prev = head
-            head = head.next
-        if (head == None):
-            return
-        prev.next = head.next
-        head = None
-
 
     def pop(self):
         "pops item off list"
-        val = self.head.getNext().getData()
-        self.head.setNext(self.head.getNext().getNext())
-        self.size -= 1
-        return val
-        print ("Popped last item off list")
+        current = self.head
+        previous = None
+        while current != None:
+            if current.getNext() == None:
+                if previous != None:
+                    previous.setNext(None)
+                else:
+                    self.head = None
+                self.size -= 1
+                return current.getData()
+            previous = current
+            current = current.getNext()
+       
+            
+            
 
     def popNode(self, index):
         "pops item off list based on index"
@@ -208,41 +181,42 @@ class UnorderedList:
       # pop should pop off the end not the head
 
 # --- OUTPUT ----
-myList = UnorderedList()
+##myList = UnorderedList()
+##
+##print ("List creation:")
+##myList.append(32)
+##myList.add(1)
+##
+##myList.add(2)
+##
+##myList.add(3)
+##
+##myList.append(4)
+##
+##myList.insert(2, "new")
+##
+##myList.remove(2)
+##
+##myList.add(5)
+##
+##myList.add(6)
+##
+##myList.add(7)
+##
+##myList.popNode(0)
+##
+##myList.add(8)
+##
+##myList.add(9)
+##
+###myList.pop()
+##
+##    
+##    
+##print ()
+##print ("List Output:" )
+##print (myList.listPrint())
+##print ()
+##print ("Size of list is:", myList.size())
+##print ("Index of number 8 is:", myList.index(1))
 
-print ("List creation:")
-
-myList.add(1)
-
-myList.add(2)
-
-myList.add(3)
-
-myList.append(4)
-
-myList.insert(2, "new")
-
-myList.remove(2)
-
-myList.add(5)
-
-myList.add(6)
-
-myList.add(7)
-
-myList.popNode(0)
-
-myList.add(8)
-
-myList.add(9)
-
-myList.pop()
-
-    
-    
-print ()
-print ("List Output:" )
-print (myList.listPrint())
-print ()
-print ("Size of list is:", myList.size())
-print ("Index of number 4 is:", myList.index(4))
