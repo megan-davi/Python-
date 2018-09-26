@@ -4,7 +4,8 @@ class Node:
     def __init__(self,initdata):
         self.data = initdata
         self.next = None
-
+        self.prev = None
+    
     def getData(self):
         return self.data
 
@@ -22,8 +23,14 @@ class UnorderedList:
         "constructor"
         self.head = None
         self.tail = None
-        #self.size = 0
-    
+
+    def __iter__(self):
+        "prints the list"
+        node = self.head
+        while node:
+            yield node
+            node = node.next
+
     def listPrint(self):
         "prints list"
         printVal = self.head
@@ -117,7 +124,6 @@ class UnorderedList:
             print ("Index out of range - insertion failed")
             return False
 
-    
     def remove(self,item):
         "remove the list item"
         current = self.head
@@ -136,8 +142,6 @@ class UnorderedList:
             previous.setNext(current.getNext())
             print ("Removed", item)
 
-
-
     def pop(self):
         "pops item off list"
         current = self.head
@@ -153,9 +157,6 @@ class UnorderedList:
             previous = current
             current = current.getNext()
        
-            
-            
-
     def popNode(self, index):
         "pops item off list based on index"
         prev = None
@@ -174,49 +175,30 @@ class UnorderedList:
             print ("Index does not exist, pop failed")
             return None
             
-    # pop item off end of list
-    #def pop(pos=None)
-     #   if pos = None:
-      #      should be the last item in the list
-      # pop should pop off the end not the head
 
-# --- OUTPUT ----
-##myList = UnorderedList()
-##
-##print ("List creation:")
-##myList.append(32)
-##myList.add(1)
-##
-##myList.add(2)
-##
-##myList.add(3)
-##
-##myList.append(4)
-##
-##myList.insert(2, "new")
-##
-##myList.remove(2)
-##
-##myList.add(5)
-##
-##myList.add(6)
-##
-##myList.add(7)
-##
-##myList.popNode(0)
-##
-##myList.add(8)
-##
-##myList.add(9)
-##
-###myList.pop()
-##
-##    
-##    
-##print ()
-##print ("List Output:" )
-##print (myList.listPrint())
-##print ()
-##print ("Size of list is:", myList.size())
-##print ("Index of number 8 is:", myList.index(1))
+    def bubbleSort(self):
+        return None
+
+
+bubble = UnorderedList()
+
+print ("List creation:")
+bubble.add(50)
+bubble.add(80)
+bubble.add(70)
+bubble.add(10)
+bubble.add(20)
+bubble.add(90)
+bubble.add(40)
+bubble.add(100)
+bubble.add(30)
+print()
+print([item.data for item in bubble])
+
+bubble.bubbleSort()
+print([item.data for item in bubble])
+
+
+    
+    
 
