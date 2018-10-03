@@ -1,12 +1,13 @@
+
 """
-Prompt: Determine which sorting alogorithm is faster on average:
+Prompt: Determine which sorting algorithm is faster on average:
 Shell sort or insertion sort
 """
 
 import random
-import time
+from timeit import default_timer as timer
 from copy import deepcopy
-from statistics import mean
+
 
 
 def insertionSort(alist):
@@ -44,103 +45,114 @@ def gapInsertionSort(alist,start,gap):
         alist[position]=currentvalue
 
 
-# 100 list items
             
-alist = [random.randrange(1, 101) for i in range(100)]
-alist2 = deepcopy(alist)
-alist3 = deepcopy(alist)
-alist4 = deepcopy(alist)
-alist5 = deepcopy(alist)
-alist6 = deepcopy(alist)
-alist7 = deepcopy(alist)
-alist8 = deepcopy(alist)
-alist9 = deepcopy(alist)
-alist10 = deepcopy(alist)
+alist = [random.randrange(1, 101) for i in range(1000)]
+alistShell = deepcopy(alist)
+alist2 = [random.randrange(1, 101) for i in range(500)]
+alist2Shell = deepcopy(alist2)
+alist3 = [random.randrange(1, 101) for i in range(100)]
+alist3Shell = deepcopy(alist3)
 
-
-start = time.time()
-insertionSort(alist)
-insertionSort(alist2)
-insertionSort(alist3)
-insertionSort(alist4)
-insertionSort(alist5)
-insertionSort(alist6)
-insertionSort(alist7)
-insertionSort(alist8)
-insertionSort(alist9)
-insertionSort(alist10)
-end = time.time()
-
-# decided to not use a while loop because it would just loop over sorting the same
-#     list that it had already sorted
-
-print("Time it took to sort 100 items via insertion was", round(end/10 - start/10, 5), "seconds.")
-# divided by ten to get an average
-
-start = time.time()
-shellSort(alist)
-shellSort(alist2)
-shellSort(alist3)
-shellSort(alist4)
-shellSort(alist5)
-shellSort(alist6)
-shellSort(alist7)
-shellSort(alist8)
-shellSort(alist9)
-shellSort(alist10)
-end = time.time()
-
-print("Time it took to sort 100 items via shell was", round(end/10 - start/10, 5), "seconds.")
-
-
-
-
-
-
-
-## 500 list items
-alist = [random.randrange(1, 101) for i in range(10000)]
-alist2 = deepcopy(alist)
-alist3 = deepcopy(alist)
-alist4 = deepcopy(alist)
-alist5 = deepcopy(alist)
-alist6 = deepcopy(alist)
-alist7 = deepcopy(alist)
-alist8 = deepcopy(alist)
-alist9 = deepcopy(alist)
-alist10 = deepcopy(alist)
-
-
-start = time.time()
-insertionSort(alist)
-insertionSort(alist2)
-insertionSort(alist3)
-insertionSort(alist4)
-insertionSort(alist5)
-insertionSort(alist6)
-insertionSort(alist7)
-insertionSort(alist8)
-insertionSort(alist9)
-insertionSort(alist10)
-end = time.time()
-
-
+print("For a random list with numbers ranging from 1 to 100:")
 print()
-print("Time it took to sort 500 items via insertion was", round(end/10 - start/10, 5), "seconds.")
+
+## Insertion Sorting
+
+# 100 items
+start = 0
+end = 0
+count = 0
+average = []
+while count < 10:
+    start = timer()
+    insertionSort(alist3)
+    end = timer()
+    count += 1
+    runtime = end - start
+    average.append(runtime)
+avg = (sum(average) / 10)
+print("Average runtime for insertion sorting 100 elements is", round(avg * 1000000, 4), "microseconds.")
 
 
-start = time.time()
-shellSort(alist)
-shellSort(alist2)
-shellSort(alist3)
-shellSort(alist4)
-shellSort(alist5)
-shellSort(alist6)
-shellSort(alist7)
-shellSort(alist8)
-shellSort(alist9)
-shellSort(alist10)
-end = time.time()
+# 500 items
+start = 0
+end = 0
+count = 0
+average = []
+while count < 10:
+    start = timer()
+    insertionSort(alist2)
+    end = timer()
+    count += 1
+    runtime = end - start
+    average.append(runtime)
+avg = (sum(average) / 10)
+print("Average runtime for insertion sorting 500 elements is", round(avg * 1000000, 4), "microseconds.")
 
-print("Time it took to sort 500 items via shell was", round(end/10 - start/10, 5), "seconds.")
+
+# 1000 items
+start = 0
+end = 0
+count = 0
+average = []
+while count < 10:
+    start = timer()
+    insertionSort(alist)
+    end = timer()
+    count += 1
+    runtime = end - start
+    average.append(runtime)
+avg = (sum(average) / 10)
+print("Average runtime for insertion sorting 1000 elements is", round(avg * 1000000, 4), "microseconds.")
+print()
+
+## Shell Sorting
+
+# 100 items
+start = 0
+end = 0
+count = 0
+average = []
+while count < 10:
+    start = timer()
+    insertionSort(alist3Shell)
+    end = timer()
+    count += 1
+    runtime = end - start
+    average.append(runtime)
+avg = (sum(average) / 10)
+print("Average runtime for Shell sorting 100 elements is", round(avg * 1000000, 4), "microseconds.")
+
+
+# 500 items
+start = 0
+end = 0
+count = 0
+average = []
+while count < 10:
+    start = timer()
+    insertionSort(alist2Shell)
+    end = timer()
+    count += 1
+    runtime = end - start
+    average.append(runtime)
+avg = (sum(average) / 10)
+print("Average runtime for Shell sorting 500 elements is", round(avg * 1000000, 4), "microseconds.")
+
+
+# 1000 items
+start = 0
+end = 0
+count = 0
+average = []
+while count < 10:
+    start = timer()
+    insertionSort(alistShell)
+    end = timer()
+    count += 1
+    runtime = end - start
+    average.append(runtime)
+avg = (sum(average) / 10)
+print("Average runtime for Shell sorting 1000 elements is", round(avg * 1000000, 4), "microseconds.")
+
 
