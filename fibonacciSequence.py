@@ -14,12 +14,12 @@ class Fibonacci:
         "Constructor"
         print("Fibonacci object created.")
         print()
-        self.iterative_count = 0
-        self.recursive_count = 0
+        self.dynamicCount = 0
+        self.recursiveCount = 0
 
     def recursive(self, n):
         "Determine fibonacci sequence recursively"
-        self.recursive_count += 1
+        self.recursiveCount += 1
         if n == 0:  # n represents number of elements for fib. sequence
             return 0
         elif n == 1:
@@ -27,13 +27,14 @@ class Fibonacci:
         else:
             return self.recursive(n - 1) + self.recursive(n - 2)
 
-    def iterative(self, n):
-        "Determine fibonacci sequence iteratively"
-        a, b = 0, 1
-        for i in range(0, n):
-            self.iterative_count += 1
-            a, b = b, a + b
-        return a
+    def dynamic(self, n):
+        "Determine fibonacci sequence dynamically"
+        self.dynamicCount += 1
+        values = [0,1]
+        for i in range(2,n+1):
+          values.append(values[i - 1] + values[i - 2])
+        return values[n]
+
 
 
 n = 10
@@ -44,13 +45,13 @@ for i in range(n):
     print(f.recursive(i))
 
 print()
-print("Printed iteratively")
+print("Printed dynamically")
 for i in range(n):
-    print(f.iterative(i))
+    print(f.dynamic(i))
 
 print()
-print("Number of iterations in recursive function: " + str(f.recursive_count))
-print("Number of iterations in iterative function: " + str(f.iterative_count))
+print("Number of iterations in recursive function: " + str(f.recursiveCount))
+print("Number of iterations in dynamic function: " + str(f.dynamicCount))
 
 '''
 Complexity of dynamic is O(2^n) (exponential)
