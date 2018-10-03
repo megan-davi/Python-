@@ -67,12 +67,15 @@ class HashTable:
         "Returns true if a specified value is associated with a key"
         return slots in self.slots
 
-    def __del__(self, slots):
-        for i in self.slots:
-            if slots in self.slots:
-                slots = None
-            else:
-                print ("Key provided doesn't exist")
+    def __delitem__(self, slots):
+        "Deletes data given a key"
+        "Not currently working"
+        print ("Deleted")
+        
+        if slots in self.slots:
+            slots = None
+        else:
+            print ("Key provided doesn't exist")
         
                 
 
@@ -91,22 +94,15 @@ H[44]="goat"
 H[55]="pig"
 H[20]="chicken"
 
+print("Keys:")
 print(H.slots)
+print()
+print("Values:")
 print(H.data)
-del (H[77])
-print(H.slots)
-print(H.data)
-
-print(H[20])
-
-print(H[17])
-H[20]='duck'
-print(H[20])
-print(H[99])
-
 
 print()
 print("Is 1 in the hash table?", 1 in H)
 print("Is 55 in the hash table?", 55 in H)
 print()
 print("Number of key-value pairs is:", len(H))
+
