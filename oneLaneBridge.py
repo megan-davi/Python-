@@ -34,6 +34,7 @@ class OneLaneBridge():
         self.leftOK = threading.Condition()   # monitor
         self.rightOK = threading.Condition()  # monitor
         self.mutex = threading.Lock()
+       
 
     def busy(self):
         return True if self.carNumber > 0 else False
@@ -41,6 +42,8 @@ class OneLaneBridge():
     def leftCar(self):
         print()
         logging.debug("Starting")
+        
+        self.direction = "west"
 
         # car drives to bridge
         driveUp = round(uniform(0, 0.015), 3) # convert s to ms for sleep function
@@ -48,7 +51,7 @@ class OneLaneBridge():
         msg = "Car took %s ms to drive to bridge" %round(driveUp * 1000) # convert back so it is easy to read
         logging.debug (msg)
 
-        # car drives across bridge
+        # car drives across bridge 1st time
         self.leftOK.acquire()
         self.mutex.acquire()
         
@@ -73,26 +76,72 @@ class OneLaneBridge():
         #----------------------------
         self.leftOK.acquire()
         self.mutex.acquire()
+        
         while self.carNumber != 0:
             self.carNumber = self.carNumber - 1
+
         if self.carNumber == 0:
             self.leftOK.acquire()
             self.leftOK.notify()
             self.leftOK.release()
         self.mutex.release()
         self.leftOK.release()
-         
-        logging.debug("Exiting")
+
+        
+
 
     def rightCar(self):
+        print()
         logging.debug("Starting")
         
+        self.direction = "east"
+
+        # car drives to bridge
         driveUp = round(uniform(0, 0.015), 3) # convert s to ms for sleep function
         time.sleep(driveUp)
         msg = "Car took %s ms to drive to bridge" %round(driveUp * 1000) # convert back so it is easy to read
         logging.debug (msg)
 
-        logging.debug("Exiting")
+        # car drives across bridge 1st time
+        self.rightOK.acquire()
+        self.mutex.acquire()
+        
+        while self.busy == False or self.carNumber > 0:
+            self.mutex.release()
+            self.rightOK.wait()
+            self.mutex.acquire()
+        while self.carNumber < 4:
+            self.carNumber = self.carNumber + 1
+        self.mutex.release()
+        self.rightOK.notify()
+        self.rightOK.release()
+        # Once one car can cross, 3 follow
+        #----------------------------
+        # critical section
+        #----------------------------
+        driveAcross = round(uniform(0.003, 0.013), 3) # convert s to ms
+        msg = "Car took %s ms to drive across bridge 1st time" %round(driveAcross * 1000)
+        logging.debug (msg)
+        #----------------------------
+        # end critical section
+        #----------------------------
+        self.rightOK.acquire()
+        self.mutex.acquire()
+
+
+        
+        while self.carNumber != 0:
+            self.carNumber = self.carNumber - 1
+            msg = ("Car is exiting bridge. {} cars on bridge coming from the {}.".format(self.carNumber, self.direction))
+            logging.debug(msg)
+        if self.carNumber == 0:
+            self.rightOK.acquire()
+            self.rightOK.notify()
+            self.rightOK.release()
+        self.mutex.release()
+        self.rightOK.release()
+    
+
 
 
 
@@ -104,12 +153,12 @@ def main():
 
     carID = 1
     # create 20 cars, 10 from the left and 10 from the right; start cars
-    for i in range(10):
+    for i in range(5):
         car = threading.Thread(target = bridge.leftCar, name = ("Car %s" % carID))
         carList.append(car)
         carID += 1
         car.start()
-    for i in range(10):
+    for i in range(5):
         car = threading.Thread(target = bridge.rightCar, name = ("Car %s" % carID))
         carList.append(car)
         carID += 1
@@ -120,7 +169,5 @@ def main():
         car.join()
 
 
-
 if __name__ == "__main__":
     main()
-
